@@ -1,5 +1,7 @@
 package com.jayden;
 
+import com.sun.jdmk.comm.HtmlAdaptorServer;
+
 import javax.management.MBeanServer;
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
@@ -16,6 +18,12 @@ public class JmxServer {
         MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         mBeanServer.registerMBean(new Hello(), new ObjectName("test:name=test1"));
 
+        ObjectName adapterName = new ObjectName("HtmlAgent:name=htmladapter,port=8082");
+        HtmlAdaptorServer adapter = new HtmlAdaptorServer();//需要引入jmxtools.jar
+        mBeanServer.registerMBean(adapter, adapterName);
+        adapter.start();
+
+        System.out.println("server started");
         Thread.sleep(Long.MAX_VALUE);
     }
 
